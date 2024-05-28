@@ -2,10 +2,22 @@ import os.path
 import environ
 from pathlib import Path
 from datetime import timedelta
+import cloudinary
+
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DEBUG = True
+
+
+import os
+
+# Initialize environment variables
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+# Use environment variables
+SECRET_KEY = env('SECRET_KEY')
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
@@ -19,13 +31,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'records.apps.RecordsConfig',
     'users.apps.UsersConfig',
     'django_filters',
     'rest_framework',
     'cloudinary_storage',
     'cloudinary',
     'corsheaders',
+    'records'
 ]
 
 REST_FRAMEWORK = {
@@ -104,27 +116,36 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'waste.wsgi.application'
 
-env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR / '.env'))
-SECRET_KEY = env('SECRET_KEY')
+
+
+
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': env('DATABASE_NAME'),
-        'USER': env('DATABASE_USER'),
-        'PASSWORD': env('DATABASE_PASSWORD'),
-        'HOST': env('DATABASE_HOST'),
-        'PORT': env('DATABASE_PORT'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
-# CLOUDINARY_STORAGE = {
-#     'CLOUD_NAME': env('CLOUD_NAME'),
-#     'API_KEY': env('API_KEY'),
-#     'API_SECRET': env('API_SECRET')
-#
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': env('DATABASE_NAME'),
+#         'USER': env('DATABASE_USER'),
+#         'PASSWORD': env('DATABASE_PASSWORD'),
+#         'HOST': env('DATABASE_HOST'),
+#         'PORT': env('DATABASE_PORT'),
+#     }
 # }
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': env('CLOUD_NAME'),
+    'API_KEY': env('API_KEY'),
+    'API_SECRET': env('API_SECRET')
+
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
